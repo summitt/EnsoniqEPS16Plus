@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.2.1/dist/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+        <script src="./eps.js"></script>
+    </head>
+    <body>
+        <div class="container">
+          <div class="row">
+            <div class="col-sm">
+                <div class="card">
+                    <div class="card-header">
+                        Select MIDI Ports:
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm">
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                    <label class="input-group-text" for="inputGroupSelect01">Midi Input</label>
+                                    </div>
+                                    <select id="midiIn" class="custom-select" id="inputGroupSelect01">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm">
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                    <label class="input-group-text" for="inputGroupSelect01">Midi Output</label>
+                                    </div>
+                                    <select id="midiOut" class="custom-select" id="inputGroupSelect01">
+                                    </select>
+                                </div>
+                            </div>  
+                        </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm">
+                <div class="card">
+                    <div class="card-header">
+                        Select Instrument, Layer and Wavesample Number:
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm">
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                    <label class="input-group-text" for="inputGroupSelect01">Instrument Number</label>
+                                    </div>
+                                    <select id="instNum" class="custom-select" id="inputGroupSelect01">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm">
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                    <label class="input-group-text" for="inputGroupSelect01">Layer Number</label>
+                                    </div>
+                                    <select id="layerNum" class="custom-select" id="inputGroupSelect01">
+                                    </select>
+                                </div>
+                            </div>  
+                            <div class="col-sm">
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                    <label class="input-group-text" for="inputGroupSelect01">Wave Sample Number</label>
+                                    </div>
+                                    <select id="waveNum" class="custom-select" id="inputGroupSelect01">
+                                    </select>
+                                </div>
+                            </div>  
+                        </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm">
+            </div>
+            <div class="col-sm"></div>
+        </div>
+        <div class="row">
+            <div class="col-sm">
+                <div class="card">
+                    <div class="card-header">
+                        Transfer Samples to and From the EPS16+:
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm">
+                                <div style="width: 100%;"><canvas id="epsWaveSample"></canvas></div>
+                            </div>
+                            <div class="col-sm">
+                                <div style="width: 100%;"><canvas id="localWaveSample"></canvas></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-3">
+                                    <button id="getWS" class="btn btn-info">Get Wavesample from EPS16+</button>
+                                </div>
+                                <div class="col-3">
+                                    <button id="download" class="btn btn-info">Download Wavesample</button>
+                                </div>
+                                <div class="col-4">
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                        <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
+                                        </div>
+                                        <div class="custom-file">
+                                        <input type="file" id="fileUpload" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01">
+                                        <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-2">
+                                    <button id="upload" class="btn btn-info">Upload to EPS16+</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm">
+                <div class="card">
+                    <div class="card-header">
+                      EPS Functions
+                    </div>
+                    <div class="card-body">
+
+                        <button id="createInst" class="btn btn-info">Create Instrument</button>
+                        <button id="createLayer" class="btn btn-info">Create Layer</button>
+                        <button id="createSQR" class="btn btn-info">Create Wavesample</button>
+                        <button id="delete" class="btn btn-info">Delete Instrument</button>
+                    </div>
+                  </div>
+            </div>
+        </row>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.0.0/chart.min.js" integrity="sha512-lkEx3HSoujDP3+V+i46oZpNx3eK67QPiWiCwoeQgR1I+4kutWAuOSs3BxEUZt4U/mUfyY5uDHlypuQ1HHKVykA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.6/dist/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.2.1/dist/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+        <script>
+            
+            for(let i=0; i<8;i++){ 
+                let globalOption = $("<option>")
+                globalOption.val(i)
+                globalOption.html(i+1)
+                $("#instNum").append(globalOption)
+
+            }
+            $("#instNum").val(0)
+            for(let i=0; i<8;i++){ 
+                let globalOption = $("<option>")
+                globalOption.val(i)
+                globalOption.html(i+1)
+                $("#layerNum").append(globalOption)
+            }
+            $("#layerNum").val(0)
+            for(let i=1; i<128;i++){ 
+                let globalOption = $("<option>")
+                globalOption.val(i)
+                globalOption.html(i)
+                $("#waveNum").append(globalOption)
+            }
+            $("#waveNum").val(1)
+            let epsWavesample = []
+            let localWavesample = []
+            let epsChart = new Chart(
+                        document.getElementById('epsWaveSample'),
+                        {
+                        type: 'line',
+                        data: {
+                            labels:[0,1],
+                            datasets: [{
+                            data: [0,0],
+                            label: "EPS Wavesample",
+                            fill: false,
+                            borderColor: 'rgb(75, 192, 192)',
+                            tension: 0.1,
+                            pointRadius: 0
+                        }]
+                        }
+                    }
+                    );
+
+            let localChart = new Chart(
+                        document.getElementById('localWaveSample'),
+                        {
+                        type: 'line',
+                        data: {
+                            labels:[0,1],
+                            datasets: [{
+                            data: [0,0],
+                            label: "Uploaded Wavesample",
+                            fill: false,
+                            borderColor: 'rgb(237,1,33)',
+                            tension: 0.1,
+                            pointRadius: 0
+                        }]
+                        }
+                    }
+                    );
+            let eps = new EPS16(function(inputs, outputs){
+                $("#midiIn").append($("<option>"))
+                $("#midiOut").append($("<option>"))
+                for(let input of inputs){
+                    let option = $("<option>")
+                    option.val(input.name)
+                    option.html(input.name)
+                    $("#midiIn").append(option)
+                }
+                for(let output of outputs){
+                    let option = $("<option>")
+                    option.val(output.name)
+                    option.html(output.name)
+                    $("#midiOut").append(option)
+                }
+
+            })
+            $("#midiIn").change( (value) =>{
+                eps.setInput(value.target.value)
+            })
+            $("#midiOut").change( (value) =>{
+                eps.setOutput(value.target.value)
+            })
+            $("#delete").click( () => {
+                eps.deleteInstrument()
+            })
+            $("#download").click( () => {
+                eps.saveFile(epsWavesample)
+            })
+            $("#upload").click( () => {
+                eps.putWavesampleData(localWavesample)
+            })
+            $("#getWS").click( async () => {
+                epsWavesample = await eps.getWavesampleData()
+                epsChart.data.labels = Array.from( {length: epsWavesample.length}, (value, index) => index),
+                epsChart.data.datasets = [
+                            {
+                                data: epsWavesample,
+                                label: "EPS Wavesample",
+                                fill: false,
+                                borderColor: 'rgb(75, 192, 192)',
+                                tension: 0.1,
+                                pointRadius: 0
+                            }
+                            ]
+                epsChart.update()
+            })
+            document.getElementById("fileUpload").addEventListener('change', function() {
+                let reader = new FileReader();
+                reader.onload = function() {
+                    let arrayBuffer = this.result;
+                    localWavesample = eps.parseWavFile(arrayBuffer)
+                    localChart.data.labels = Array.from( {length: localWavesample.length}, (value, index) => index),
+                    localChart.data.datasets = [
+                                {
+                                    data: localWavesample,
+                                    label: "Uploaded Wavesample",
+                                    fill: false,
+                                    borderColor: 'rgb(237,1,33)',
+                                    tension: 0.1,
+                                    pointRadius: 0
+                                }
+                                ]
+                    localChart.update()
+
+
+                }
+                reader.readAsArrayBuffer(this.files[0]);
+
+            }, false);
+            $("#instNum").change( () =>{
+                eps.setInstrumentNumber(parseInt($("#instNum").val()))
+            })
+            $("#layerNum").change( () =>{
+                eps.setLayerNumber(parseInt($("#layerNum").val()))
+            })
+            $("#waveNum").change( () =>{
+                eps.setWavesampleNumber(parseInt($("#waveNum").val()))
+            })
+
+        </script>
+    </body>
+</html>
