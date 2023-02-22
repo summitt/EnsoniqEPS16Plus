@@ -101,7 +101,11 @@
                             </div>
                             <div class="row">
                                 <div class="col-3">
-                                    <button id="getWS" class="btn btn-info">Get Wavesample from EPS16+</button>
+                                    <button id="getWS" class="btn btn-info">Get Wavesample from EPS16+
+                                        <span id="downloadSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display:none"></span>
+
+
+                                    </button>
                                 </div>
                                 <div class="col-3">
                                     <button id="download" class="btn btn-info">Download Wavesample</button>
@@ -118,7 +122,9 @@
                                     </div>
                                 </div>
                                 <div class="col-2">
-                                    <button id="upload" class="btn btn-info">Upload to EPS16+</button>
+                                    <button id="upload" class="btn btn-info">Upload to EPS16+
+                                        <span id="uploadSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display:none"></span>
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -223,13 +229,25 @@
                     option.html(output.name)
                     $("#midiOut").append(option)
                 }
+                let midiIn = localStorage.getItem("midiIn")
+                let midiOut = localStorage.getItem("midiOut")
+                if(midiIn){
+                    $("#midiIn").val(midiIn)
+                    eps.setInput(midiIn)
+                }
+                if(midiOut){
+                    $("#midiOut").val(midiOut)
+                    eps.setOutput(midiOut)
+                }
 
             })
             $("#midiIn").change( (value) =>{
                 eps.setInput(value.target.value)
+                localStorage.setItem('midiIn', value.target.value);
             })
             $("#midiOut").change( (value) =>{
                 eps.setOutput(value.target.value)
+                localStorage.setItem('midiOut', value.target.value);
             })
             $("#delete").click( () => {
                 eps.deleteInstrument()
@@ -237,10 +255,22 @@
             $("#download").click( () => {
                 eps.saveFile(epsWavesample)
             })
-            $("#upload").click( () => {
-                eps.putWavesampleData(localWavesample)
+            $("#upload").click( async () => {
+                $("#uploadSpinner").show()
+                await eps.uploadWavToEPS(localWavesample)
+                $("#uploadSpinner").hide()
+            })
+            $("#createInst").click( () => {
+                eps.createInstrument()
+            })
+            $("#createLayer").click( () => {
+                eps.createLayer()
+            })
+            $("#createSQR").click( () => {
+                eps.createSqrWave()
             })
             $("#getWS").click( async () => {
+                $("#downloadSpinner").show()
                 epsWavesample = await eps.getWavesampleData()
                 epsChart.data.labels = Array.from( {length: epsWavesample.length}, (value, index) => index),
                 epsChart.data.datasets = [
@@ -254,6 +284,7 @@
                             }
                             ]
                 epsChart.update()
+                $("#downloadSpinner").hide()
             })
             document.getElementById("fileUpload").addEventListener('change', function() {
                 let reader = new FileReader();

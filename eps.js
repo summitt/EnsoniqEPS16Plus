@@ -135,22 +135,31 @@ class EPS16 {
         sampleOffsets = sampleOffsets.concat(offsets)
         let cmd = this.createMIDIMessage(0x06, sampleOffsets)
         this.sendData(cmd)
+        await this.sleep(2000)
         let responses = await this.readMessages()
         for(let resp of responses){
             if(this.isAck(resp)){
                 this.sendAck()
-                let rawData = await this.readMessages()
-                let waveData = this.convertFrom16BitMidi(rawData[0])
-                for(let i=0; i<waveData.length; i++){
-                    waveData[i] = this.convertToSignedInt(waveData[i]) 
+                let messages = await this.readMessages()
+                for(let msg of messages){
+                    if(msg.length > 4){
+                        let waveData = this.convertFrom16BitMidi(msg)
+                        for(let i=0; i<waveData.length; i++){
+                            waveData[i] = this.convertToSignedInt(waveData[i]) 
+                        }
+                        return waveData
+                    }
                 }
-                return waveData
 
             }
         }
+        return []
     }
     setParameter(paramGroup, paramByte, paramValue){
-        let cmd = this.createMIDIMessage([paramGroup,paramByte,paramValue])
+        let header = [paramGroup, paramByte]
+        let midiValue = this.convertTo12BitMidi([paramValue],4)
+        let msg = header.concat(midiValue)
+        let cmd = this.createMIDIMessage(0x11,msg)
         this.sendData(cmd)
     }
     async putWavesampleData(audio){
@@ -162,16 +171,17 @@ class EPS16 {
             0x00, // start offset
             0x00, // start offset
         ]
-        sampleOffsets = sampleOffset.concat(offsets)
+        sampleOffsets = sampleOffsets.concat(offsets)
         let cmd = this.createMIDIMessage(0x0f,sampleOffsets)
         this.sendData(cmd)
         let messages = await this.readMessages()
         for(let msg of messages){
             if(this.isAck(msg)){
                 this.sendData(midiData)
-                this.readMessages.then( resp => resp).forEach( resp => {
+                let responses = await this.readMessages()
+                responses.forEach( (resp) => {
                     if(this.isAck(resp)){
-                        this.setParameter(0x20, 0x18, offsets)
+                        this.setParameter(0x20, 0x18, audio.length)
                     }
                 })
             }
@@ -182,22 +192,28 @@ class EPS16 {
 
     async uploadWavToEPS(audio){
         await this.deleteInstrument()
+        await this.sleep(100)
         await this.createInstrument()
+        await this.sleep(100)
         await this.createLayer()
+        await this.sleep(100)
         await this.createSqrWave()
+        await this.sleep(500)
         this.setParameter(0x20, 0x00, 2) // set loop forward
-        await this.sleep(0.2) 
-        this.setparameter(0x20, 0x19, 0) // set loop pos
-        await this.sleep(0.2) 
+        await this.sleep(200)
+        this.setParameter(0x20, 0x19, 0) // set loop pos
+        await this.sleep(200)
         this.setParameter(0x20, 0x17, 0) // set loop start
-        await this.sleep(0.2) 
+        await this.sleep(200)
         this.setParameter(0x20, 0x18, 1) // set loop end
-        await this.sleep(0.2) 
+        await this.sleep(200)
         this.setParameter(0x20, 0x15, 0) // set sample start
-        await this.sleep(0.2) 
+        await this.sleep(200)
         this.setParameter(0x20, 0x16, 1) // set sample end
-        await this.sleep(0.2) 
+        await this.sleep(200)
         await this.truncateWavesample()
+        await this.sleep(500)
+        await this.readMessages()
         await this.putWavesampleData(audio)
     }
     /**
@@ -278,7 +294,7 @@ class EPS16 {
         let readMessages = []
         const startTime = Date.now()
         let timeout=0;
-        while(this.midiMessages.length == 0 &&  timeout < 3000){
+        while(this.midiMessages.length == 0 &&  timeout < 10000){
             timeout = Date.now() - startTime;
             await this.sleep(100)
         }
@@ -382,11 +398,9 @@ class EPS16 {
         let midiArray = []
         for(let i=0; i<stop; i++){
             let last6Bits = binString.substring(binString.length - 6, binString.length)
-            console.log(last6Bits)
             binString = binString.substring(0, binString.length -6)
             midiArray.push(parseInt(last6Bits,2))
         }
-        console.log(midiArray)
         while(midiArray.length < minSize){
             midiArray.push(0)
         }
@@ -394,15 +408,19 @@ class EPS16 {
         
     }
     convertTo16BitMidi(data){
-        midiArray=[]
-        for(let byte in data){
+        for(let i=0; i<data.length;i++){
+            data[i] = data[i] +2**16
+        }
+        console.log(data)
+        let midiArray=[]
+        for(let byte of data){
             let byte3 = byte & 0x003F
             let byte2 = (byte & 0x00C0) >> 6
             byte2 = (byte & 0x0F00) >> 6 | byte2
-            byte1 = (byte & 0xF000) >> 12
-            midiArray.append(byte1)
-            midiArray.append(byte2)
-            midiArray.append(byte3)
+            let byte1 = (byte & 0xF000) >> 12
+            midiArray.push(byte1)
+            midiArray.push(byte2)
+            midiArray.push(byte3)
         }
         return midiArray
     }
@@ -415,7 +433,6 @@ class EPS16 {
         return midiArray
     }
     getEndOffset(bit16Params){
-        console.log(bit16Params)
         let word1 = bit16Params[119] << 16
         let word2 = bit16Params[120] << 8
         let word3 = bit16Params[121]
@@ -431,7 +448,6 @@ class EPS16 {
     }
     setWavesampleNumber(num){
         this.wsBytes = this.convertTo12BitMidi([num],2)
-        console.log(this.wsBytes)
     }
 
 

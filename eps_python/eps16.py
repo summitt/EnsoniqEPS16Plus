@@ -126,6 +126,7 @@ class EPS16:
         return midi_array
 
     def convert_to_16_bit_midi(self, audio):
+        print(audio)
         midi_array=[]
         data=[]
         for i in range(0,len(audio),2):
@@ -249,6 +250,7 @@ class EPS16:
         if not self.is_ack(msg): 
             self.print_error_code(msg)
             return
+        print(midi_wav_data)
         self.send_data(midi_wav_data)
         msg = self.get_messages("Expect ACK")
         if not self.is_ack(msg): 
@@ -433,8 +435,8 @@ def main():
         print("3. Create SQR Wavesample")
         print("4. Create Empty Wavesample")
         print("5. Delete instrument")
-        print("7. Save Wavesample to file")
-        print("8. Upload a wav file to ensoniq")
+        print("6. Save Wavesample to file")
+        print("7. Upload a wav file to ensoniq")
         resp = input("Choose a number: ")
         match resp:
             case "0": 
