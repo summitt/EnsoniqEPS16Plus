@@ -147,7 +147,13 @@
                     </div>
                   </div>
             </div>
-        </row>
+        </div>
+            <div class="row">
+                <div class="col-4">
+                    <button class="btn btn-primary" id="patron">Support via Patron!</button>
+                </div>
+
+            </div>
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.0.0/chart.min.js" integrity="sha512-lkEx3HSoujDP3+V+i46oZpNx3eK67QPiWiCwoeQgR1I+4kutWAuOSs3BxEUZt4U/mUfyY5uDHlypuQ1HHKVykA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
@@ -317,6 +323,9 @@
             })
             $("#waveNum").change( () =>{
                 eps.setWavesampleNumber(parseInt($("#waveNum").val()))
+            })
+            $("#patron").click( () => {
+                window.location = "https://patreon.com/null0perat0r"
             })
 
         </script>
