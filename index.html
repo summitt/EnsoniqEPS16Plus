@@ -197,7 +197,8 @@
                             fill: false,
                             borderColor: 'rgb(75, 192, 192)',
                             tension: 0.1,
-                            pointRadius: 0
+                            pointRadius: 0,
+                            borderWidth: 1
                         }]
                         }
                     }
@@ -215,7 +216,8 @@
                             fill: false,
                             borderColor: 'rgb(237,1,33)',
                             tension: 0.1,
-                            pointRadius: 0
+                            pointRadius: 0,
+                            borderWidth: 1
                         }]
                         }
                     }
@@ -284,12 +286,13 @@
                 epsChart.data.labels = Array.from( {length: epsWavesample.length}, (value, index) => index),
                 epsChart.data.datasets = [
                             {
-                                data: epsWavesample,
+                                data: epsWavesample.map( a => a/32767),
                                 label: "EPS Wavesample",
                                 fill: false,
                                 borderColor: 'rgb(75, 192, 192)',
                                 tension: 0.1,
-                                pointRadius: 0
+                                pointRadius: 0,
+                                borderWidth: 1
                             }
                             ]
                 epsChart.update()
@@ -303,12 +306,13 @@
                     localChart.data.labels = Array.from( {length: localWavesample.length}, (value, index) => index),
                     localChart.data.datasets = [
                                 {
-                                    data: localWavesample,
+                                    data: localWavesample.map( a => a/32767),
                                     label: "Uploaded Wavesample",
                                     fill: false,
                                     borderColor: 'rgb(237,1,33)',
                                     tension: 0.1,
-                                    pointRadius: 0
+                                    pointRadius: 0,
+                                    borderWidth: 1
                                 }
                                 ]
                     localChart.update()
