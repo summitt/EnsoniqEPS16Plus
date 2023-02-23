@@ -117,7 +117,7 @@
                                         </div>
                                         <div class="custom-file">
                                         <input type="file" id="fileUpload" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01">
-                                        <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                                        <label class="custom-file-label" for="inputGroupFile01">Drag file Here</label>
                                         </div>
                                     </div>
                                 </div>
@@ -220,6 +220,9 @@
                         }
                     }
                     );
+            function handleError(error){
+                alert(error)
+            }
             let eps = new EPS16(function(inputs, outputs){
                 $("#midiIn").append($("<option>"))
                 $("#midiOut").append($("<option>"))
@@ -246,7 +249,7 @@
                     eps.setOutput(midiOut)
                 }
 
-            })
+            }, handleError )
             $("#midiIn").change( (value) =>{
                 eps.setInput(value.target.value)
                 localStorage.setItem('midiIn', value.target.value);

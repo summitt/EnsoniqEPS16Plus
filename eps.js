@@ -1,7 +1,7 @@
 class EPS16 {
     inputs = []
     outputs = []
-    constructor(setUpCallback){
+    constructor(setUpCallback, errorCallback){
         this.inputs = []
         this.outputs = []
         this.instNum = 0
@@ -11,6 +11,7 @@ class EPS16 {
         this.midiOutput = NaN
         this.midiMessages = []
         this.setUpCallback = setUpCallback
+        this.errorCallback = errorCallback
         navigator.requestMIDIAccess({sysex: true}).then( (midiAccess) => {
             for(let input of midiAccess.inputs.values()){
                 this.inputs.push(input)
@@ -321,7 +322,11 @@ class EPS16 {
                 this.midiMessages.push(midiMessage.data)
             }
             if(midiMessage.data[4] == 0x1){
-                console.log(this.getResponseMessage(this.stripSysexHeader(midiMessage.data)))
+                let message = this.getResponseMessage(this.stripSysexHeader(midiMessage.data))
+                if(message.indexOf("Error") != -1){
+                    this.errorCallback(message)
+                }
+                console.log(message)
             }
         }
     }
@@ -394,7 +399,7 @@ class EPS16 {
         for( let byte of data){
             binString += byte.toString(2).padStart(16,0)
         }
-        let stop = Math.floor(binString.length/6)
+        let stop = binString.length/6
         let midiArray = []
         for(let i=0; i<stop; i++){
             let last6Bits = binString.substring(binString.length - 6, binString.length)
@@ -404,14 +409,14 @@ class EPS16 {
         while(midiArray.length < minSize){
             midiArray.push(0)
         }
-        return midiArray.reverse()
+        midiArray.reverse()
+        return midiArray
         
     }
     convertTo16BitMidi(data){
         for(let i=0; i<data.length;i++){
             data[i] = data[i] +2**16
         }
-        console.log(data)
         let midiArray=[]
         for(let byte of data){
             let byte3 = byte & 0x003F
