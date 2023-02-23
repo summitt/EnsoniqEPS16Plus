@@ -67,8 +67,10 @@ class EPS16 {
         let messages = await this.readMessages()
         if(this.isAck(messages[0])){
             console.log("Created instrument")
+            return true
         }else{
             console.log("Error Creating instrument")
+            return false
         }
 
     }
@@ -78,8 +80,10 @@ class EPS16 {
         let messages = await this.readMessages()
         if(this.isAck(messages[0])){
             console.log("Created Layer")
+            return true
         }else{
             console.log("Error Creating Layer")
+            return false
         }
     }
     async createSqrWave(){
@@ -88,8 +92,10 @@ class EPS16 {
         let messages = await this.readMessages()
         if(this.isAck(messages[0])){
             console.log("Created SQR")
+            return true
         }else{
             console.log("Error Creating SQR wavesample")
+            return false;
         }
     }
     async clearWavesample(){
@@ -108,8 +114,10 @@ class EPS16 {
         let messages = await this.readMessages()
         if(this.isAck(messages[0])){
             console.log("Cleared WaveSample")
+            return true
         }else{
             console.log("Error Clearing wavesample")
+            return false
         }
 
     }
@@ -119,8 +127,10 @@ class EPS16 {
         let messages = await this.readMessages()
         if(this.isAck(messages[0])){
             console.log("Trucnated WaveSample")
+            return true
         }else{
             console.log("Error truncating wavesample")
+            return false
         }
     }
     async getWavesampleData(){
@@ -183,16 +193,18 @@ class EPS16 {
                 responses.forEach( (resp) => {
                     if(this.isAck(resp)){
                         this.setParameter(0x20, 0x18, audio.length)
+                        return true
                     }
                 })
             }
         }
+        return false
 
 
     }
 
     async uploadWavToEPS(audio){
-        await this.createSqrWave()
+        if(!await this.createSqrWave()) return false
         await this.sleep(500)
         this.setParameter(0x20, 0x00, 2) // set loop forward
         await this.sleep(200)
@@ -206,7 +218,7 @@ class EPS16 {
         await this.sleep(200)
         this.setParameter(0x20, 0x16, 1) // set sample end
         await this.sleep(200)
-        await this.truncateWavesample()
+        if(!await this.truncateWavesample()) return false
         await this.sleep(500)
         await this.readMessages()
         await this.putWavesampleData(audio)
