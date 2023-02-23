@@ -192,12 +192,6 @@ class EPS16 {
     }
 
     async uploadWavToEPS(audio){
-        await this.deleteInstrument()
-        await this.sleep(100)
-        await this.createInstrument()
-        await this.sleep(100)
-        await this.createLayer()
-        await this.sleep(100)
         await this.createSqrWave()
         await this.sleep(500)
         this.setParameter(0x20, 0x00, 2) // set loop forward
