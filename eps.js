@@ -365,7 +365,9 @@ class EPS16 {
             0x00,
             this.layerNum,
         ].concat(this.wsBytes)
-        return header.concat(data)
+        let msg = header.concat(data)
+        console.log(msg)
+        return msg
     }
     getResponseMessage(message){
         const code = message[2]
@@ -410,13 +412,18 @@ class EPS16 {
         for( let byte of data){
             binString += byte.toString(2).padStart(16,0)
         }
+        while(binString.length%12 != 0){
+            binString = binString.substring(1)
+        }
         let stop = binString.length/6
+        console.log(stop)
         let midiArray = []
         for(let i=0; i<stop; i++){
             let last6Bits = binString.substring(binString.length - 6, binString.length)
             binString = binString.substring(0, binString.length -6)
             midiArray.push(parseInt(last6Bits,2))
         }
+        console.log(midiArray)
         while(midiArray.length < minSize){
             midiArray.push(0)
         }

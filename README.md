@@ -20,8 +20,7 @@ Depending on the file size this can take some time.
 ***Note***: This is very buggy for large files over 5 seconds. Something that should be fixed soonish. 
 
 ### Current Limitations and Bugs
-1. There is a bug that prevents loading a wave sample into the second layer of an instrument. To work around this you need to create a new instrument with one layer and one wavesample to upload to the EPS16. Once this is complete you need to use the command options on the syth to copy the layer to the instrument you want. 
-2. Large files over 5ish seconds timeout
+1. Large files over 5ish seconds timeout
 
 ### Support 
 - [Submit issues here](https://github.com/summitt/EnsoniqEPS16Plus/issues)
