@@ -4,6 +4,8 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/regular.min.css" integrity="sha512-3YMBYASBKTrccbNMWlnn0ZoEOfRjVs9qo/dlNRea196pg78HaO0H/xPPO2n6MIqV6CgTYcWJ1ZB2EgWjeNP6XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/js/all.min.js" integrity="sha512-2bMhOkE/ACz21dJT8zBOMgMecNxx0d37NND803ExktKiKdSzdwn+L7i9fdccw/3V06gM/DBWKbYmQvKMdAA9Nw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.2.1/dist/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
         <script src="./eps.js"></script>
     </head>
@@ -55,7 +57,7 @@
                             <div class="col-sm">
                                 <div class="input-group mb-3">
                                     <div class="input-group-prepend">
-                                    <label class="input-group-text" for="inputGroupSelect01">Instrument Number</label>
+                                    <label class="input-group-text" for="inputGroupSelect01"><i class="fa-solid fa-music"></i>&nbsp;&nbsp;&nbsp;Instrument Number</label>
                                     </div>
                                     <select id="instNum" class="custom-select" id="inputGroupSelect01">
                                     </select>
@@ -64,7 +66,7 @@
                             <div class="col-sm">
                                 <div class="input-group mb-3">
                                     <div class="input-group-prepend">
-                                    <label class="input-group-text" for="inputGroupSelect01">Layer Number</label>
+                                    <label class="input-group-text" for="inputGroupSelect01"><i class="fa-solid fa-layer-group"></i> &nbsp;&nbsp;&nbsp;Layer Number</label>
                                     </div>
                                     <select id="layerNum" class="custom-select" id="inputGroupSelect01">
                                     </select>
@@ -73,7 +75,7 @@
                             <div class="col-sm">
                                 <div class="input-group mb-3">
                                     <div class="input-group-prepend">
-                                    <label class="input-group-text" for="inputGroupSelect01">Wave Sample Number</label>
+                                    <label class="input-group-text" for="inputGroupSelect01"><i class="fa-solid fa-wave-square"></i> &nbsp;&nbsp;&nbsp;Wave Sample Number</label>
                                     </div>
                                     <select id="waveNum" class="custom-select" id="inputGroupSelect01">
                                     </select>
@@ -93,42 +95,82 @@
             <div class="col-sm">
                 <div class="card">
                     <div class="card-header">
+                      EPS Functions
+                    </div>
+                    <div class="card-body">
+
+                        <div class="row">
+                            <div class="col-sm">
+                                <button id="createInst" class="btn btn-info btn-block"><i class="fa-regular fa-square-plus"></i> Create Instrument</button>
+                            </div>
+                            <div class="col-sm">
+                                <button id="createLayer" class="btn btn-info btn-block"><i class="fa-regular fa-square-plus"></i> Create Layer</button>
+                            </div>
+                            <div class="col-sm">
+                                <button id="createSQR" class="btn btn-info btn-block"><i class="fa-regular fa-square-plus"></i> Create Wavesample</button>
+                            </div>
+                            <div class="col-sm">
+                                <button id="delete" class="btn btn-danger btn-block"><i class="fa-regular fa-trash-can"></i> Delete Instrument</button>
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm">
+                <div class="card">
+                    <div class="card-header">
                         Transfer Samples to and From the EPS16+:
                     </div>
                     <div class="card-body">
                         <div class="row">
                             <div class="col-sm">
-                                <div style="width: 100%;"><canvas id="epsWaveSample"></canvas></div>
-                            </div>
-                            <div class="col-sm">
-                                <div style="width: 100%;"><canvas id="localWaveSample"></canvas></div>
-                            </div>
-                            <div class="row">
-                                <div class="col-3">
-                                    <button id="getWS" class="btn btn-info">Get Wavesample from EPS16+
-                                        <span id="downloadSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display:none"></span>
-
-
-                                    </button>
-                                </div>
-                                <div class="col-3">
-                                    <button id="download" class="btn btn-info">Download Wavesample</button>
-                                </div>
-                                <div class="col-4">
-                                    <div class="input-group mb-3">
-                                        <div class="input-group-prepend">
-                                        <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
-                                        </div>
-                                        <div class="custom-file">
-                                        <input type="file" id="fileUpload" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01">
-                                        <label class="custom-file-label" for="inputGroupFile01">Drag file Here</label>
-                                        </div>
+                                <div class="row">
+                                    <div class="col-sm">
+                                        <div style="width: 100%;"><canvas id="epsWaveSample"></canvas></div>
                                     </div>
                                 </div>
-                                <div class="col-2">
-                                    <button id="upload" class="btn btn-info">Upload to EPS16+
-                                        <span id="uploadSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display:none"></span>
-                                    </button>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <button id="getWS" class="btn btn-info btn-block"><i class="fa-solid fa-download"></i> Get Wavesample 
+                                            <span id="downloadSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display:none"></span>
+                                        </button>
+                                    </div>
+                                    <div class="col-6">
+                                        <button id="download" class="btn btn-info btn-block"><i class="fa-solid fa-file-arrow-down"></i> Save Wavesample</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm">
+                                <div class="row">
+                                    <div class="col-sm">
+                                        <div style="width: 100%;"><canvas id="localWaveSample"></canvas></div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                            <span class="input-group-text" id="inputGroupFileAddon01"><i class="fa-solid fa-wave-square"></i></span>
+                                            </div>
+                                            <div class="custom-file">
+                                            <input type="file" id="fileUpload" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01">
+                                            <label class="custom-file-label" for="inputGroupFile01">Drag WAV File Here</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <button id="upload" class="btn btn-info btn-block"><i class="fa-solid fa-upload"></i> Upload to EPS16+
+                                            <span id="uploadSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display:none"></span>
+                                        </button>
+                                    </div>
+                                    <div class="col-7"></div>
+                                    <div class="col-12">
+                                        <i><b>Note:</b> Only supports mono wave files and cannot exceed the memory of the synth</i><br/>
+                                        <i><b>Note:</b> You need to have an existing instrument, layer, and wavesample to upload into. Use the utility functions above to create them. </i><br/>
+                                        <i><b>Note:</b> There is a bug that prevents loading samples into a second layer on the same instrument</i><br/>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -140,21 +182,23 @@
             <div class="col-sm">
                 <div class="card">
                     <div class="card-header">
-                      EPS Functions
+                      Support
                     </div>
                     <div class="card-body">
-
-                        <button id="createInst" class="btn btn-info">Create Instrument</button>
-                        <button id="createLayer" class="btn btn-info">Create Layer</button>
-                        <button id="createSQR" class="btn btn-info">Create Wavesample</button>
-                        <button id="delete" class="btn btn-info">Delete Instrument</button>
+                        <div class="row">
+                            <div class="col-sm">
+                                <button class="btn btn-primary btn-block" id="patron"><i class="fa-brands fa-patreon"></i> Support via Patron!</button>
+                            </div>
+                            <div class="col-sm">
+                                <button id="bugs" class="btn btn-info btn-block"><i class="fa-brands fa-github"></i> Submit Bugs and Requests here</button>
+                            </div>
+                        </div>
                     </div>
                   </div>
             </div>
         </div>
             <div class="row">
                 <div class="col-4">
-                    <button class="btn btn-primary" id="patron">Support via Patron!</button>
                 </div>
 
             </div>
@@ -337,6 +381,9 @@
             })
             $("#patron").click( () => {
                 window.location = "https://patreon.com/null0perat0r"
+            })
+            $("#bugs").click( () => {
+                window.location = "https://github.com/summitt/EnsoniqEPS16Plus/issues"
             })
 
         </script>

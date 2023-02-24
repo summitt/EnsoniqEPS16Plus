@@ -204,8 +204,8 @@ class EPS16 {
     }
 
     async uploadWavToEPS(audio){
-        if(!await this.createSqrWave()) return false
-        await this.sleep(500)
+        //if(!await this.createSqrWave()) return false
+        //await this.sleep(500)
         this.setParameter(0x20, 0x00, 2) // set loop forward
         await this.sleep(200)
         this.setParameter(0x20, 0x19, 0) // set loop pos
@@ -278,6 +278,11 @@ class EPS16 {
         let length = (view.getUint32(4,true) - 36)/2
         if(view.getUint16(22, true) != 1){
             alert("Only Mono Files allowed")
+            return;
+        }
+        if(length > 512900){
+            alert("file too big")
+            return
         }
         let audio = []
         let offset=44
