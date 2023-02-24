@@ -1,6 +1,6 @@
 ![](eps16plus.jpg)
 ### Ensoniq EPS16+ Wavesample Utility
-This a a utility to upload and download samples to and from the Ensoniq EPS16+ sampling sythesizer. I built this project becuase all the tools that currently exist seem to be getting outdated  and would not run on all operating systems (i.e M1 macs)  or were command line tools that were not intuitive, therefore would break the creative flow when trying to iterate on a song quickly. This project uses web midi so send sysex data to and from the EPS16+ so in theory should work on all operating systems (i.e. Windows, Linux, OSX, iOS, and Android).
+This a a utility to upload and download samples to and from the Ensoniq EPS16+ sampling sythesizer. I built this project becuase all the tools that currently exist seem to be getting outdated  and would not run on all operating systems (i.e M1 macs)  or were command line tools that were not intuitive, therefore would break the creative flow when trying to iterate on a song quickly. This project uses web midi to send sysex data to and from the EPS16+ so in theory should work on all operating systems (i.e. Windows, Linux, OSX, iOS, and Android).
 
 ### How to get started
 [Navigate here to use the lastest version.](https://summitt.github.io/EnsoniqEPS16Plus/)
