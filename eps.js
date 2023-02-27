@@ -231,6 +231,7 @@ class EPS16 {
         for(let msg of messages){
             if(await this.isAck(msg)){
                 await this.sendData(midiData)
+                await this.sleep(1000)
                 let responses = await this.readMessages()
                 for(let resp of responses){
                     if(await this.isAck(resp)){
@@ -452,18 +453,19 @@ class EPS16 {
     convertTo12BitMidi(data, minSize=2){
         let binString = ''
         for( let byte of data){
+
             binString += byte.toString(2).padStart(16,0)
-        }
-        while(binString.length%12 != 0){
-            //binString = binString.substring(1)
-            binString = '0'+binString
         }
         let stop = binString.length/6
         let midiArray = []
         for(let i=0; i<stop; i++){
             let last6Bits = binString.substring(binString.length - 6, binString.length)
-            binString = binString.substring(0, binString.length -6)
-            midiArray.push(parseInt(last6Bits,2))
+            if(binString.length < 6 && parseInt(last6Bits,2) == 0){
+                continue
+            }else{
+                binString = binString.substring(0, binString.length -6)
+                midiArray.push(parseInt(last6Bits,2))
+            }
         }
         while(midiArray.length < minSize){
             midiArray.push(0)
