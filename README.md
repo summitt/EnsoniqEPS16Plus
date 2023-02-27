@@ -17,10 +17,9 @@ To be able to upload a wav file to the EPS16+ you need to:
 4. Once satisfied click Upload to EPS16+
 
 Depending on the file size this can take some time. 
-***Note***: This is very buggy for large files over 5 seconds. Something that should be fixed soonish. 
-
+### Video Tutorial
+[Overview of how to use](https://youtu.be/-471osvR67s)
 ### Current Limitations and Bugs
-1. Large files over 5ish seconds timeout
 1. If you start getting NAK messages just refresh the browser and try again
 
 ### Support 
