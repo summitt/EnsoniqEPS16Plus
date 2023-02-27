@@ -21,6 +21,7 @@ Depending on the file size this can take some time.
 
 ### Current Limitations and Bugs
 1. Large files over 5ish seconds timeout
+1. If you start getting NAK messages just refresh the browser and try again
 
 ### Support 
 - [Submit issues here](https://github.com/summitt/EnsoniqEPS16Plus/issues)

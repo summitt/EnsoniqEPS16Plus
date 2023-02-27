@@ -1,21 +1,62 @@
 <!doctype html>
 <html lang="en">
-  <head>
+
+<head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/regular.min.css" integrity="sha512-3YMBYASBKTrccbNMWlnn0ZoEOfRjVs9qo/dlNRea196pg78HaO0H/xPPO2n6MIqV6CgTYcWJ1ZB2EgWjeNP6XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/js/all.min.js" integrity="sha512-2bMhOkE/ACz21dJT8zBOMgMecNxx0d37NND803ExktKiKdSzdwn+L7i9fdccw/3V06gM/DBWKbYmQvKMdAA9Nw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.2.1/dist/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-        <script src="./eps.js"></script>
-    </head>
-    <body>
-        <div class="container">
-          <div class="row">
-            <div class="col-sm"><h2>Enable Sysex: <i>Edit -> System-Midi->Sysex-MIDI</i> and set to ON</h2>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/regular.min.css"
+        integrity="sha512-3YMBYASBKTrccbNMWlnn0ZoEOfRjVs9qo/dlNRea196pg78HaO0H/xPPO2n6MIqV6CgTYcWJ1ZB2EgWjeNP6XA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/js/all.min.js"
+        integrity="sha512-2bMhOkE/ACz21dJT8zBOMgMecNxx0d37NND803ExktKiKdSzdwn+L7i9fdccw/3V06gM/DBWKbYmQvKMdAA9Nw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.2.1/dist/css/bootstrap.min.css"
+        integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <script src="./eps.js"></script>
+    <script src="./epsChart.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+              <img src="..." class="rounded me-2" alt="...">
+              <strong class="me-auto">Bootstrap</strong>
+              <small>11 mins ago</small>
+              <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+              Hello, world! This is a toast message.
             </div>
           </div>
-          <div class="row">
+        <div class="row">
+            <div class="col-sm">
+                <h2>Enable Sysex: <i>Edit -> System-Midi->Sysex-MIDI</i> and set to ON</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm">
+                <div class="card">
+                    <div class="card-header">
+                        Support
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm">
+                                <button class="btn btn-primary btn-block" id="patron"><i
+                                        class="fa-brands fa-patreon"></i> Support via Patron!</button>
+                            </div>
+                            <div class="col-sm">
+                                <button id="bugs" class="btn btn-info btn-block"><i class="fa-brands fa-github"></i>
+                                    Submit Bugs and Requests here</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
             <div class="col-sm">
                 <div class="card">
                     <div class="card-header">
@@ -26,7 +67,7 @@
                             <div class="col-sm">
                                 <div class="input-group mb-3">
                                     <div class="input-group-prepend">
-                                    <label class="input-group-text" for="inputGroupSelect01">Midi Input</label>
+                                        <label class="input-group-text" for="inputGroupSelect01">Midi Input</label>
                                     </div>
                                     <select id="midiIn" class="custom-select" id="inputGroupSelect01">
                                     </select>
@@ -35,18 +76,18 @@
                             <div class="col-sm">
                                 <div class="input-group mb-3">
                                     <div class="input-group-prepend">
-                                    <label class="input-group-text" for="inputGroupSelect01">Midi Output</label>
+                                        <label class="input-group-text" for="inputGroupSelect01">Midi Output</label>
                                     </div>
                                     <select id="midiOut" class="custom-select" id="inputGroupSelect01">
                                     </select>
                                 </div>
-                            </div>  
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-          </div>
-          <div class="row">
+        </div>
+        <div class="row">
             <div class="col-sm">
                 <div class="card">
                     <div class="card-header">
@@ -57,7 +98,9 @@
                             <div class="col-sm">
                                 <div class="input-group mb-3">
                                     <div class="input-group-prepend">
-                                    <label class="input-group-text" for="inputGroupSelect01"><i class="fa-solid fa-music"></i>&nbsp;&nbsp;&nbsp;Instrument Number</label>
+                                        <label class="input-group-text" for="inputGroupSelect01"><i
+                                                class="fa-solid fa-music"></i>&nbsp;&nbsp;&nbsp;Instrument
+                                            Number</label>
                                     </div>
                                     <select id="instNum" class="custom-select" id="inputGroupSelect01">
                                     </select>
@@ -66,55 +109,58 @@
                             <div class="col-sm">
                                 <div class="input-group mb-3">
                                     <div class="input-group-prepend">
-                                    <label class="input-group-text" for="inputGroupSelect01"><i class="fa-solid fa-layer-group"></i> &nbsp;&nbsp;&nbsp;Layer Number</label>
+                                        <label class="input-group-text" for="inputGroupSelect01"><i
+                                                class="fa-solid fa-layer-group"></i> &nbsp;&nbsp;&nbsp;Layer
+                                            Number</label>
                                     </div>
                                     <select id="layerNum" class="custom-select" id="inputGroupSelect01">
                                     </select>
                                 </div>
-                            </div>  
+                            </div>
                             <div class="col-sm">
                                 <div class="input-group mb-3">
                                     <div class="input-group-prepend">
-                                    <label class="input-group-text" for="inputGroupSelect01"><i class="fa-solid fa-wave-square"></i> &nbsp;&nbsp;&nbsp;Wave Sample Number</label>
+                                        <label class="input-group-text" for="inputGroupSelect01"><i
+                                                class="fa-solid fa-wave-square"></i> &nbsp;&nbsp;&nbsp;Wave Sample
+                                            Number</label>
                                     </div>
                                     <select id="waveNum" class="custom-select" id="inputGroupSelect01">
                                     </select>
                                 </div>
-                            </div>  
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-          </div>
-          <div class="row">
-            <div class="col-sm">
-            </div>
-            <div class="col-sm"></div>
         </div>
         <div class="row">
             <div class="col-sm">
                 <div class="card">
                     <div class="card-header">
-                      EPS Functions
+                        EPS Functions
                     </div>
                     <div class="card-body">
 
                         <div class="row">
                             <div class="col-sm">
-                                <button id="createInst" class="btn btn-info btn-block"><i class="fa-regular fa-square-plus"></i> Create Instrument</button>
+                                <button id="createInst" class="btn btn-info btn-block"><i
+                                        class="fa-regular fa-square-plus"></i> Create Instrument</button>
                             </div>
                             <div class="col-sm">
-                                <button id="createLayer" class="btn btn-info btn-block"><i class="fa-regular fa-square-plus"></i> Create Layer</button>
+                                <button id="createLayer" class="btn btn-info btn-block"><i
+                                        class="fa-regular fa-square-plus"></i> Create Layer</button>
                             </div>
                             <div class="col-sm">
-                                <button id="createSQR" class="btn btn-info btn-block"><i class="fa-regular fa-square-plus"></i> Create Wavesample</button>
+                                <button id="createSQR" class="btn btn-info btn-block"><i
+                                        class="fa-regular fa-square-plus"></i> Create Wavesample</button>
                             </div>
                             <div class="col-sm">
-                                <button id="delete" class="btn btn-danger btn-block"><i class="fa-regular fa-trash-can"></i> Delete Instrument</button>
+                                <button id="delete" class="btn btn-danger btn-block"><i
+                                        class="fa-regular fa-trash-can"></i> Delete Instrument</button>
                             </div>
                         </div>
                     </div>
-                  </div>
+                </div>
             </div>
         </div>
         <div class="row">
@@ -128,47 +174,59 @@
                             <div class="col-sm">
                                 <div class="row">
                                     <div class="col-sm">
-                                        <div style="width: 100%;"><canvas id="epsWaveSample"></canvas></div>
+                                        <div style="width: 100%;"><canvas id="epsWave_chart"></canvas></div>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-6">
-                                        <button id="getWS" class="btn btn-info btn-block"><i class="fa-solid fa-download"></i> Get Wavesample 
-                                            <span id="downloadSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display:none"></span>
+                                        <button id="getWS" class="btn btn-info btn-block"><i
+                                                class="fa-solid fa-download"></i> Get Wavesample
+                                            <span id="downloadSpinner" class="spinner-border spinner-border-sm"
+                                                role="status" aria-hidden="true" style="display:none"></span>
+                                            <span id="percentComplete" style="display:none">0%</span>
                                         </button>
                                     </div>
                                     <div class="col-6">
-                                        <button id="download" class="btn btn-info btn-block"><i class="fa-solid fa-file-arrow-down"></i> Save Wavesample</button>
+                                        <button id="download" class="btn btn-info btn-block"><i
+                                                class="fa-solid fa-file-arrow-down"></i> Save Wavesample</button>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-sm">
                                 <div class="row">
                                     <div class="col-sm">
-                                        <div style="width: 100%;"><canvas id="localWaveSample"></canvas></div>
+                                        <div style="width: 100%;"><canvas id="localWave_chart"></canvas></div>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="input-group mb-3">
                                             <div class="input-group-prepend">
-                                            <span class="input-group-text" id="inputGroupFileAddon01"><i class="fa-solid fa-wave-square"></i></span>
+                                                <span class="input-group-text" id="inputGroupFileAddon01"><i
+                                                        class="fa-solid fa-wave-square"></i></span>
                                             </div>
                                             <div class="custom-file">
-                                            <input type="file" id="fileUpload" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01">
-                                            <label class="custom-file-label" for="inputGroupFile01">Drag WAV File Here</label>
+                                                <input type="file" id="localWave" class="custom-file-input"
+                                                    id="inputGroupFile01" aria-describedby="inputGroupFileAddon01">
+                                                <label class="custom-file-label" for="inputGroupFile01">Drag WAV
+                                                    File Here</label>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-12">
-                                        <button id="upload" class="btn btn-info btn-block"><i class="fa-solid fa-upload"></i> Upload to EPS16+
-                                            <span id="uploadSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display:none"></span>
+                                        <button id="upload" class="btn btn-info btn-block"><i
+                                                class="fa-solid fa-upload"></i> Upload to EPS16+
+                                            <span id="uploadSpinner" class="spinner-border spinner-border-sm"
+                                                role="status" aria-hidden="true" style="display:none"></span>
                                         </button>
                                     </div>
                                     <div class="col-7"></div>
                                     <div class="col-12">
-                                        <i><b>Note:</b> Only supports mono wave files and cannot exceed the memory of the synth</i><br/>
-                                        <i><b>Note:</b> You need to have an existing instrument, layer, and wavesample to upload into. Use the utility functions above to create them. </i><br/>
+                                        <i><b>Note:</b> Only supports mono wave files and cannot exceed the memory
+                                            of the synth</i><br />
+                                        <i><b>Note:</b> You need to have an existing instrument, layer, and
+                                            wavesample to upload into. Use the utility functions above to create
+                                            them. </i><br />
                                     </div>
                                 </div>
                             </div>
@@ -181,107 +239,135 @@
             <div class="col-sm">
                 <div class="card">
                     <div class="card-header">
-                      Support
+                        Upload multiple waveforms at once (can also create transwaves, soundscapes)
                     </div>
                     <div class="card-body">
+                        <div class="row" id="scapes">
+
+                        </div>
+                        <br />
                         <div class="row">
                             <div class="col-sm">
-                                <button class="btn btn-primary btn-block" id="patron"><i class="fa-brands fa-patreon"></i> Support via Patron!</button>
+                                <button id="addWave" class="btn btn-info btn-block"><i class="fa-solid fa-plus"></i>
+                                    Add Additional WaveForms
+                                </button>
+                            </div>
+                        </div>
+                        <hr/>
+                        <div class="row">
+                            <div class="col-sm">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                        id="flexRadioDefault1" value="simple" checked>
+                                    <label class="form-check-label" for="flexRadioDefault1">
+                                        Upload One Sample per Instrument
+                                    </label>
+                                </div>
                             </div>
                             <div class="col-sm">
-                                <button id="bugs" class="btn btn-info btn-block"><i class="fa-brands fa-github"></i> Submit Bugs and Requests here</button>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                        id="flexRadioDefault2" value="transwave">
+                                    <label class="form-check-label" for="flexRadioDefault2">
+                                        Combine all samples and create a transwave (mod wheel controlled)
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-sm">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                        id="flexRadioDefault3" value="morph">
+                                    <label class="form-check-label" for="flexRadioDefault2">
+                                        Upload all samples into a morphing sound scape (limited to 8 samples)
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm">
+                                <button id="uploadSoundScape" class="btn btn-info btn-block"><i
+                                        class="fa-solid fa-upload"></i> Upload Samples
+                                    <span id="uploadSoundScapeSpinner" class="spinner-border spinner-border-sm"
+                                        role="status" aria-hidden="true" style="display:none"></span>
+                                </button>
                             </div>
                         </div>
                     </div>
-                  </div>
+                </div>
             </div>
         </div>
-            <div class="row">
-                <div class="col-4">
+        <div class="row">
+            <div class="col-sm">
+                <div class="card">
+                    <div class="card-header">
+                        Event Log
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <textarea class="form-control" id="log" rows="3"></textarea>
+                          </div>
+                        </div>
+                    </div>
                 </div>
-
             </div>
+        </div>
+    </div>
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.0.0/chart.min.js" integrity="sha512-lkEx3HSoujDP3+V+i46oZpNx3eK67QPiWiCwoeQgR1I+4kutWAuOSs3BxEUZt4U/mUfyY5uDHlypuQ1HHKVykA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.6/dist/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.2.1/dist/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.0.0/chart.min.js"
+            integrity="sha512-lkEx3HSoujDP3+V+i46oZpNx3eK67QPiWiCwoeQgR1I+4kutWAuOSs3BxEUZt4U/mUfyY5uDHlypuQ1HHKVykA=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.6/dist/umd/popper.min.js"
+            integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+            crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.2.1/dist/js/bootstrap.min.js"
+            integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+            crossorigin="anonymous"></script>
         <script>
-            
-            for(let i=0; i<8;i++){ 
+
+            for (let i = 0; i < 8; i++) {
                 let globalOption = $("<option>")
                 globalOption.val(i)
-                globalOption.html(i+1)
+                globalOption.html(i + 1)
                 $("#instNum").append(globalOption)
 
             }
             $("#instNum").val(0)
-            for(let i=0; i<8;i++){ 
+            for (let i = 0; i < 8; i++) {
                 let globalOption = $("<option>")
                 globalOption.val(i)
-                globalOption.html(i+1)
+                globalOption.html(i + 1)
                 $("#layerNum").append(globalOption)
             }
             $("#layerNum").val(0)
-            for(let i=1; i<128;i++){ 
+            for (let i = 1; i < 128; i++) {
                 let globalOption = $("<option>")
                 globalOption.val(i)
                 globalOption.html(i)
                 $("#waveNum").append(globalOption)
             }
             $("#waveNum").val(1)
-            let epsWavesample = []
-            let localWavesample = []
-            let epsChart = new Chart(
-                        document.getElementById('epsWaveSample'),
-                        {
-                        type: 'line',
-                        data: {
-                            labels:[0,1],
-                            datasets: [{
-                            data: [0,0],
-                            label: "EPS Wavesample",
-                            fill: false,
-                            borderColor: 'rgb(75, 192, 192)',
-                            tension: 0.1,
-                            pointRadius: 0,
-                            borderWidth: 1
-                        }]
-                        }
-                    }
-                    );
 
-            let localChart = new Chart(
-                        document.getElementById('localWaveSample'),
-                        {
-                        type: 'line',
-                        data: {
-                            labels:[0,1],
-                            datasets: [{
-                            data: [0,0],
-                            label: "Uploaded Wavesample",
-                            fill: false,
-                            borderColor: 'rgb(237,1,33)',
-                            tension: 0.1,
-                            pointRadius: 0,
-                            borderWidth: 1
-                        }]
-                        }
-                    }
-                    );
-            function handleError(error){
-                alert(error)
+
+            function handleError(error) {
+                $("#log").append(`${new Date()}: ${error}\r\n`)
             }
-            let eps = new EPS16(function(inputs, outputs){
+            function handleSuccess(success) {
+                $("#log").append(`${new Date()}: ${success}\r\n`)
+            }
+
+            let eps = new EPS16(function (inputs, outputs) {
                 $("#midiIn").append($("<option>"))
                 $("#midiOut").append($("<option>"))
-                for(let input of inputs){
+                for (let input of inputs) {
                     let option = $("<option>")
                     option.val(input.name)
                     option.html(input.name)
                     $("#midiIn").append(option)
                 }
-                for(let output of outputs){
+                for (let output of outputs) {
                     let option = $("<option>")
                     option.val(output.name)
                     option.html(output.name)
@@ -289,51 +375,85 @@
                 }
                 let midiIn = localStorage.getItem("midiIn")
                 let midiOut = localStorage.getItem("midiOut")
-                if(midiIn){
+                if (midiIn) {
                     $("#midiIn").val(midiIn)
                     eps.setInput(midiIn)
                 }
-                if(midiOut){
+                if (midiOut) {
                     $("#midiOut").val(midiOut)
                     eps.setOutput(midiOut)
                 }
 
-            }, handleError )
-            $("#midiIn").change( (value) =>{
+            }, handleError, handleSuccess)
+
+            function resetUI(){
+                $("#instNum").val(0) 
+                eps.setInstrumentNumber(0)
+                $("#layerNum").val(0)
+                eps.setLayerNumber(0)
+                $("#waveNum").val(1)
+                eps.setWavesampleNumber(1)
+            }
+
+            let localChart = new EPSChart("localWave", "Uploaded Wavesample", 'rgb(237,1,33)', true, eps)
+            let epsChart = new EPSChart("epsWave", "EPS Wavesample", 'rgb(75,192,192)', false, eps)
+            let waveScapes = []
+
+            $("#midiIn").change((value) => {
                 eps.setInput(value.target.value)
                 localStorage.setItem('midiIn', value.target.value);
             })
-            $("#midiOut").change( (value) =>{
+            $("#midiOut").change((value) => {
                 eps.setOutput(value.target.value)
                 localStorage.setItem('midiOut', value.target.value);
             })
-            $("#delete").click( () => {
+            $("#delete").click(() => {
                 eps.deleteInstrument()
             })
-            $("#download").click( () => {
-                eps.saveFile(epsWavesample)
+            $("#download").click(() => {
+                eps.saveFile(epsChart.wavesample)
             })
-            $("#upload").click( async () => {
+            $("#upload").click(async () => {
                 $("#uploadSpinner").show()
-                await eps.uploadWavToEPS(localWavesample)
+                await eps.uploadWavToEPS(localChart.wavesample)
                 $("#uploadSpinner").hide()
             })
-            $("#createInst").click( () => {
+            $("#createInst").click(() => {
                 eps.createInstrument()
             })
-            $("#createLayer").click( () => {
+            $("#createLayer").click(() => {
                 eps.createLayer()
             })
-            $("#createSQR").click( () => {
+            $("#createSQR").click(() => {
                 eps.createSqrWave()
             })
-            $("#getWS").click( async () => {
+            $("#uploadSoundScape").click(async() => {
+                let waves = waveScapes.map(ws => ws.wavesample)
+                console.log(waves)
+                $("#uploadSoundScapeSpinner").show()
+                const value = $('input[name="flexRadioDefault"]:checked').val();
+                if (value == "simple") {
+                    await eps.uploadToDifferentInstruments(waves)
+                    resetUI()
+                } else if (value == "morph") {
+                    await eps.createMorphingWaveTable(waves)
+                    resetUI()
+                } else if (value == "transwave") {
+                    await eps.uploadAsTranswave(waves)
+                    resetUI()
+                }
+                $("#uploadSoundScapeSpinner").hide()
+            })
+            $("#getWS").click(async () => {
                 $("#downloadSpinner").show()
-                epsWavesample = await eps.getWavesampleData()
-                epsChart.data.labels = Array.from( {length: epsWavesample.length}, (value, index) => index),
-                epsChart.data.datasets = [
+                $("#percentComplete").show()
+                epsChart.wavesample = epsWavesample = await eps.getWavesampleDataChunked(5000, (wavedata, percentComplete) => {
+                    $("#percentComplete").html(`${percentComplete}%`)
+                    epsChart.wavesample = wavedata
+                    epsChart.chart.data.labels = Array.from({ length: epsChart.wavesample.length }, (value, index) => index),
+                        epsChart.chart.data.datasets = [
                             {
-                                data: epsWavesample.map( a => a/32767),
+                                data: epsChart.wavesample.map(a => a / 32767),
                                 label: "EPS Wavesample",
                                 fill: false,
                                 borderColor: 'rgb(75, 192, 192)',
@@ -341,50 +461,86 @@
                                 pointRadius: 0,
                                 borderWidth: 1
                             }
-                            ]
-                epsChart.update()
+                        ]
+                    epsChart.chart.update()
+
+                })
                 $("#downloadSpinner").hide()
+                $("#percentComplete").hide()
+                $("#percentComplete").html("0%")
             })
-            document.getElementById("fileUpload").addEventListener('change', function() {
-                let reader = new FileReader();
-                reader.onload = function() {
-                    let arrayBuffer = this.result;
-                    localWavesample = eps.parseWavFile(arrayBuffer)
-                    localChart.data.labels = Array.from( {length: localWavesample.length}, (value, index) => index),
-                    localChart.data.datasets = [
-                                {
-                                    data: localWavesample.map( a => a/32767),
-                                    label: "Uploaded Wavesample",
-                                    fill: false,
-                                    borderColor: 'rgb(237,1,33)',
-                                    tension: 0.1,
-                                    pointRadius: 0,
-                                    borderWidth: 1
-                                }
-                                ]
-                    localChart.update()
-
-
-                }
-                reader.readAsArrayBuffer(this.files[0]);
-
-            }, false);
-            $("#instNum").change( () =>{
+            $("#instNum").change(() => {
                 eps.setInstrumentNumber(parseInt($("#instNum").val()))
             })
-            $("#layerNum").change( () =>{
+            $("#layerNum").change(() => {
                 eps.setLayerNumber(parseInt($("#layerNum").val()))
             })
-            $("#waveNum").change( () =>{
+            $("#waveNum").change(() => {
                 eps.setWavesampleNumber(parseInt($("#waveNum").val()))
             })
-            $("#patron").click( () => {
+            let waveSampleIndex=0
+            $("#addWave").click(() => {
+                let index = waveSampleIndex++ 
+                let chartHtml = ` 
+                    <div class="row">
+                        <div class="col-12">
+                            <div style="width: 100%;"><canvas id="wave${index}_chart"></canvas></div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                <span class="input-group-text" id="inputGroupFileAddon01"><i class="fa-solid fa-wave-square"></i></span>
+                                </div>
+                                <div class="custom-file">
+                                <input type="file" id="wave${index}" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01">
+                                <label class="custom-file-label" for="inputGroupFile01">Drag WAV File Here</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-2">
+                            <button class="btn btn-block" id="wave${index}Btn">
+                                <svg class="svg-inline--fa fa-trash" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="trash" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"></path></svg>
+                            </button>
+                            </div>
+                        </div>
+                    </div>
+                `
+                let div = $("<div>")
+                div.addClass("col-6")
+                div.attr("id", `chart${index}`)
+                div.html(chartHtml)
+                $("#scapes").append(div)
+                waveScapes.push(new EPSChart(`wave${index}`, `Wave ${index}`, 'rgb(75,192,192)', true, eps))
+                $(`#wave${index}Btn`).click( () =>{
+                    $(`#chart${index}`).remove()
+                    for(let i=0; i<waveScapes.length; i++){
+                        const wave = waveScapes[i]
+                        if(wave.label == `Wave ${index}`){
+                            waveScapes.splice(i,1)
+                            break;
+                        }
+
+                    }
+                })
+
+            })
+            $("#addWave").click()
+            $("#patron").click(() => {
                 window.location = "https://patreon.com/null0perat0r"
             })
-            $("#bugs").click( () => {
+            $("#bugs").click(() => {
                 window.location = "https://github.com/summitt/EnsoniqEPS16Plus/issues"
             })
 
+            $("#liveToast").show()
+
+            
+
         </script>
-    </body>
+</body>
+
 </html>
