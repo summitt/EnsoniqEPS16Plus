@@ -231,10 +231,11 @@ class EPS16 {
         for(let msg of messages){
             if(await this.isAck(msg)){
                 await this.sendData(midiData)
-                await this.sleep(1000)
+                await this.sleep(500)
                 let responses = await this.readMessages()
                 for(let resp of responses){
                     if(await this.isAck(resp)){
+                        this.sendAck()
                         this.successCallback("Success: Wavesample data successfully sent")
                         return true
                     }

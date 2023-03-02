@@ -403,6 +403,9 @@ class EPS16:
                         self.print_error_code(msg)
                     print("{}: {}".format(log_name, msg))
                     return msg
+                else:
+                    self.outport.send(msg)
+                    
     def send_ccs(self):
         wait_itr=0
         while True:
@@ -420,6 +423,7 @@ class EPS16:
                     wait_itr = wait_itr + 1
                     if wait_itr == 30:
                         wait_itr = 0
+
                 
 
 
@@ -469,7 +473,8 @@ def main():
                 audio = eps.read_wav_file(filename)
                 eps.put_wavesample_data(audio)
             case "12":
-                eps.get_wavesample_parameters()
+                eps.get_messages("asdf")
+                #eps.get_wavesample_parameters()
             case _:
                 print("Invalid Option...")
 
