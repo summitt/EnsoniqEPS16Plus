@@ -170,12 +170,14 @@ class EPS16 {
         let sampleOffsets = startOffset.concat(endOffset)
         let cmd = this.createMIDIMessage(0x06, sampleOffsets)
         await this.sendData(cmd)
-        await this.sleep(1000)
         let responses = await this.readMessages()
+        console.log("#####################Responses", responses)
         for(let resp of responses){
             if(await this.isAck(resp)){
+                await this.sleep(1000)
                 await this.sendAck()
                 let messages = await this.readMessages()
+                console.log("#####################", messages)
                 for(let msg of messages){
                     if(msg.length > 4){
                         let waveData = this.convertFrom16BitMidi(msg)
@@ -194,48 +196,76 @@ class EPS16 {
         return []
     }
     async setParameter(paramGroup, paramByte, paramValue){
+        console.log(`Setting Value ${paramValue.toString(16)}, ${paramValue} for group ${paramGroup.toString(16)}, ${paramByte.toString(16)}`)
         let header = [paramGroup, paramByte]
         let midiValue = this.convertTo12BitMidi([paramValue],4)
+        console.log(`Converted 12 bit midi value is ${midiValue.map(val => val.toString(16))}`)
         let msg = header.concat(midiValue)
         let cmd = this.createMIDIMessage(0x11,msg)
         console.log("Set Parameter", cmd)
         await this.sendData(cmd)
-        return this.sleep(500)
     }
     async putWavesampleDataInChunks(audio, chunkSize){
+        console.log("Total Size: ", audio.length)
         let chunks = []
         for (let i = 0; i < audio.length; i += chunkSize) {
             const chunk = audio.slice(i, i + chunkSize);
+            /*if(chunk.length < chunkSize){
+                while(chunk.length < chunkSize){
+                    chunk.push(0)
+                }
+            }*/
             chunks.push(chunk)
         }
+        console.log(chunks)
 
         let start = 0;
         for(let chunk of chunks){
-            if(!await this.putWavesampleData(chunk, start)) return false
+            if(!await this.putWavesampleData(chunk, start)){
+                //try again
+                if(!await this.putWavesampleData(chunk, start)){
+                    this.errorCallback("Error: Unable to upload a portion of the wavesample")
+                    return false
+                }
+                await this.sleep(2000)
+            } 
+            console.log( "Percent complete:", ((start+chunk.length)/audio.length) * 100)
             start+=chunkSize
         }
+        await this.sendAck()
+        let messages = await this.readMessages()
+        await this.sendAck()
         await this.sleep(1000)
         await this.setParameter(0x20, 0x18, audio.length)
         return true
 
     }
     async putWavesampleData(audio, start=0){
+        console.log("OFFSETS", start, audio.length, audio.length + start)
         let midiData = this.convertTo16BitMidi(audio)
         let startOffset = this.convertTo12BitMidi([start], 4)
         let endOffset = this.convertTo12BitMidi([audio.length + start], 4)
         let sampleOffsets = startOffset.concat(endOffset)
         let cmd = this.createMIDIMessage(0x0f,sampleOffsets)
+        //send offset command
         await this.sendData(cmd)
-        await this.sleep(500)
         let messages = await this.readMessages()
+        if(messages.length == 0){
+            this.errorCallback("Error: Unable to initiate pushing a wavesample to the the EPS")
+            return false
+        }
         for(let msg of messages){
             if(await this.isAck(msg)){
+                //send midi data
+                //await this.sendAck()
                 await this.sendData(midiData)
-                await this.sleep(500)
                 let responses = await this.readMessages()
+                if(responses.length == 0 ){
+                    this.successCallback("Success: Wavesample data successfully sent")
+                    return true
+                }
                 for(let resp of responses){
                     if(await this.isAck(resp)){
-                        this.sendAck()
                         this.successCallback("Success: Wavesample data successfully sent")
                         return true
                     }
@@ -252,10 +282,16 @@ class EPS16 {
         await this.setParameter(0x20, 0x00, 2) // set loop forward
         await this.setParameter(0x20, 0x19, 0) // set loop pos
         await this.setParameter(0x20, 0x17, 0) // set loop start
-        await this.setParameter(0x20, 0x18, 1) // set loop end
+        //await this.setParameter(0x20, 0x18, 1) // set loop end
         await this.setParameter(0x20, 0x15, 0) // set sample start
         await this.setParameter(0x20, 0x16, 1) // set sample end
-        return await this.truncateWavesample() && await this.putWavesampleDataInChunks(audio,256)
+        
+        if(await this.truncateWavesample() && await this.putWavesampleDataInChunks(audio,5000)){
+            //this.sendAck()
+            return true
+        }else{
+            return false
+        }
     }
     /**
      * Utility Commands for midi data coversions
@@ -332,11 +368,9 @@ class EPS16 {
     }
     async isAck(message){
         if(typeof message != 'undefined' && message.length >0 && message[0] == 1 && message[message.length-1] == 1){ /// Wait message
+            this.sleep(30000) /// manual sais wait up to 30 seconds 
             let messages = await this.readMessages()
-            for(let msg of messages){
-                if(msg[0]=1)
-                return await this.isAck(msg)
-            }
+            return messages.reduce( (acc, msg) => acc || this.isAck(msg), false)
         }else if(typeof message != 'undefined' && message.length >0 && message[0] == 1 && message[message.length-1] == 0){ /// ACK message
             return true
         }else{
@@ -352,7 +386,7 @@ class EPS16 {
         let timeout=0;
         while(this.midiMessages.length == 0 &&  timeout < 5000){
             timeout = Date.now() - startTime;
-            await this.sleep(100)
+            await this.sleep(500)
         }
         while(this.midiMessages.length > 0){
             const msg = this.midiMessages.pop()
@@ -400,6 +434,7 @@ class EPS16 {
         packet.push(0xf7)
         console.log("Send ->", packet)
         await this.midiOutput.send(packet)
+        await this.sleep(700)
 
     }
     createMIDIMessage(command, data=[]){
@@ -546,20 +581,28 @@ class EPS16 {
     async uploadAsTranswave(arrayOfWaveTables){
         this.setLayerNumber(0)
         this.setWavesampleNumber(1)
+        let isSuccess = false
         for(let i=this.instNum; i<8; i++){
-            if(await this.createInstrument()){
-                await this.createLayer()
-                await this.createSqrWave()
+            if(await this.createInstrument() && await this.createLayer() &&await this.createSqrWave()){
+                isSuccess = true
                 break;
             }else{
                 this.setInstrumentNumber(i)
             }
         }
+        if(!isSuccess) {
+            this.errorCallback("Error: Could not create an instrument for the transwave")
+            return
+        }
         let transwave = []
         for(let wave of arrayOfWaveTables){
             transwave = transwave.concat(wave)
         }
-        await this.uploadWavToEPS(transwave)
+        isSuccess = await this.uploadWavToEPS(transwave)
+        if(!isSuccess){
+            this.errorCallback("Error: Unable to upload transwave to EPS16")
+            return
+        }
         //set loop end
         await this.sleep(1000)
         await this.setParameter(0x20,0x18,arrayOfWaveTables[0].length)
@@ -569,18 +612,23 @@ class EPS16 {
         await this.setParameter(0x20,0x07,0x0A)
         //set modulation ammount
         await this.setParameter(0x20,0x08,arrayOfWaveTables.length+1)
-        this.successCallback("Complete: Uploaded Transwave")
+        let messages = await this.readMessages()
+        if(messages.length = 0){
+            this.successCallback("Complete: Uploaded Transwave")
+        }else{
+            this.errorCallback("Error: Error occured when uploading the transwave")
+        }
 
     }
     async uploadToDifferentInstruments(arrayOfWaveTables){
         this.setLayerNumber(0)
         this.setWavesampleNumber(1)
         for(let wave of arrayOfWaveTables){
+            //find an empty instrument
             for(let i=this.instNum; i<8; i++){
-                if(await this.createInstrument()){
-                    await this.createLayer()
-                    await this.createSqrWave()
+                if(await this.createInstrument() && await this.createLayer() && this.createSqrWave()){
                     await this.uploadWavToEPS(wave)
+                    this.successCallback("Success: Adding new instrument")
                     await this.sleep(500)
                     break;
                 }else{
@@ -593,13 +641,19 @@ class EPS16 {
     }
     async createMorphingWaveTable(arrayOfWaveTables){
         //enable all patche
+        let isSuccess = false
         for(let i=this.instNum; i<8; i++){
             if(await this.createInstrument()){
+                isSuccess = true
                 break;
             }else{
                 this.setInstrumentNumber(i)
             }
 
+        }
+        if(!isSuccess){
+            this.errorCallback("Error:  Unable to create instrument for morphing wave forms")
+            return false
         }
         this.setLayerNumber(0)
         this.setWavesampleNumber(1)
@@ -610,10 +664,10 @@ class EPS16 {
             let wave = arrayOfWaveTables[i]
             this.setLayerNumber(i)
             this.setWavesampleNumber(1)
-            await this.createLayer()
-            await this.createSqrWave()
-            this.setWavesampleNumber(i+1)
-            await this.uploadWavToEPS(wave)
+            if( !(await this.createLayer() && await this.createSqrWave() && this.setWavesampleNumber(i+1) && await this.uploadWavToEPS(wave))){
+                this.errorCallback("Error: Unable to update instrument parameters")
+                return false
+            }
             await this.sleep(500)
             await this.setParameter(0x18,0x05, 1) // crossfade to linier
             await this.setParameter(0x18,0x03, bp.pointA)
