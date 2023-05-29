@@ -289,6 +289,7 @@
                                         class="fa-solid fa-upload"></i> Upload Samples
                                     <span id="uploadSoundScapeSpinner" class="spinner-border spinner-border-sm"
                                         role="status" aria-hidden="true" style="display:none"></span>
+                                    <span id="percentAllComplete" style="display:none">0%</span>
                                 </button>
                             </div>
                         </div>
@@ -428,21 +429,32 @@
                 eps.createSqrWave()
             })
             $("#uploadSoundScape").click(async() => {
+                $("#percentAllComplete").html(`0%`)
                 let waves = waveScapes.map(ws => ws.wavesample)
                 console.log(waves)
                 $("#uploadSoundScapeSpinner").show()
                 const value = $('input[name="flexRadioDefault"]:checked').val();
                 if (value == "simple") {
-                    await eps.uploadToDifferentInstruments(waves)
+                    await eps.uploadToDifferentInstruments(waves, (percent) => { 
+                        $("#percentAllComplete").show()
+                        $("#percentAllComplete").html(`${percent}%`)
+                    })
                     resetUI()
                 } else if (value == "morph") {
-                    await eps.createMorphingWaveTable(waves)
+                    await eps.createMorphingWaveTable(waves, (percent) => { 
+                        $("#percentAllComplete").show()
+                        $("#percentAllComplete").html(`${percent}%`)
+                    })
                     resetUI()
                 } else if (value == "transwave") {
-                    await eps.uploadAsTranswave(waves)
+                    await eps.uploadAsTranswave(waves, (percent) => { 
+                        $("#percentAllComplete").show()
+                        $("#percentAllComplete").html(`${percent}%`)
+                    })
                     resetUI()
                 }
                 $("#uploadSoundScapeSpinner").hide()
+                $("#percentAllComplete").hide()
             })
             $("#getWS").click(async () => {
                 $("#downloadSpinner").show()

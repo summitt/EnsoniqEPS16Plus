@@ -205,7 +205,7 @@ class EPS16 {
         console.log("Set Parameter", cmd)
         await this.sendData(cmd)
     }
-    async putWavesampleDataInChunks(audio, chunkSize){
+    async putWavesampleDataInChunks(audio, chunkSize, numWaves=1, waveIndex=0, progressCallback=()=>{}){
         console.log("Total Size: ", audio.length)
         let chunks = []
         for (let i = 0; i < audio.length; i += chunkSize) {
@@ -229,7 +229,11 @@ class EPS16 {
                 }
                 await this.sleep(2000)
             } 
-            console.log( "Percent complete:", ((start+chunk.length)/audio.length) * 100)
+            console.log( "Percent Complete:", ((start+chunk.length)/audio.length) * 100)
+            progressCallback(
+                `${ Math.round(
+                    (waveIndex + ((start+chunk.length)/audio.length))/numWaves*100)
+                }`)
             start+=chunkSize
         }
         await this.sendAck()
@@ -278,7 +282,7 @@ class EPS16 {
 
     }
 
-    async uploadWavToEPS(audio){
+    async uploadWavToEPS(audio, numWaves=1, waveIndex=0, progressCallback=()=>{}){
         await this.setParameter(0x20, 0x00, 2) // set loop forward
         await this.setParameter(0x20, 0x19, 0) // set loop pos
         await this.setParameter(0x20, 0x17, 0) // set loop start
@@ -286,7 +290,7 @@ class EPS16 {
         await this.setParameter(0x20, 0x15, 0) // set sample start
         await this.setParameter(0x20, 0x16, 1) // set sample end
         
-        if(await this.truncateWavesample() && await this.putWavesampleDataInChunks(audio,5000)){
+        if(await this.truncateWavesample() && await this.putWavesampleDataInChunks(audio,5000, numWaves, waveIndex, progressCallback)){
             //this.sendAck()
             return true
         }else{
@@ -346,6 +350,10 @@ class EPS16 {
     parseWavFile(buffer){
         let view = new DataView(buffer)
         let length = (view.getUint32(4,true) - 36)/2
+        if(view.getUint16(34, true) != 16){
+            alert("Only 16 bit files allowed")
+            return;
+        }
         if(view.getUint16(22, true) != 1){
             alert("Only Mono Files allowed")
             return;
@@ -551,6 +559,7 @@ class EPS16 {
     }
     setWavesampleNumber(num){
         this.wsBytes = this.convertTo12BitMidi([num],2)
+        return true
     }
     getCrossFadeBreakPoints(length, step){
         const sectionLength = Math.floor( 128 / ((length -1)*2) )
@@ -578,7 +587,7 @@ class EPS16 {
     /***
      * Macros
      */
-    async uploadAsTranswave(arrayOfWaveTables){
+    async uploadAsTranswave(arrayOfWaveTables, progressCallback){
         this.setLayerNumber(0)
         this.setWavesampleNumber(1)
         let isSuccess = false
@@ -598,7 +607,7 @@ class EPS16 {
         for(let wave of arrayOfWaveTables){
             transwave = transwave.concat(wave)
         }
-        isSuccess = await this.uploadWavToEPS(transwave)
+        isSuccess = await this.uploadWavToEPS(transwave, 1,0,progressCallback)
         if(!isSuccess){
             this.errorCallback("Error: Unable to upload transwave to EPS16")
             return
@@ -620,15 +629,17 @@ class EPS16 {
         }
 
     }
-    async uploadToDifferentInstruments(arrayOfWaveTables){
+    async uploadToDifferentInstruments(arrayOfWaveTables, progressCallback){
         this.setLayerNumber(0)
         this.setWavesampleNumber(1)
+        let index =0
         for(let wave of arrayOfWaveTables){
             //find an empty instrument
             for(let i=this.instNum; i<8; i++){
-                if(await this.createInstrument() && await this.createLayer() && this.createSqrWave()){
-                    await this.uploadWavToEPS(wave)
+                if(await this.createInstrument() && await this.createLayer() && await this.createSqrWave()){
+                    await this.uploadWavToEPS(wave, arrayOfWaveTables.length, index, progressCallback)
                     this.successCallback("Success: Adding new instrument")
+                    index++
                     await this.sleep(500)
                     break;
                 }else{
@@ -639,7 +650,7 @@ class EPS16 {
         }
         this.successCallback("Complete: Uploading samples")
     }
-    async createMorphingWaveTable(arrayOfWaveTables){
+    async createMorphingWaveTable(arrayOfWaveTables, progressCallback){
         //enable all patche
         let isSuccess = false
         for(let i=this.instNum; i<8; i++){
@@ -663,8 +674,8 @@ class EPS16 {
             const bp = this.getCrossFadeBreakPoints(arrayOfWaveTables.length,i)
             let wave = arrayOfWaveTables[i]
             this.setLayerNumber(i)
-            this.setWavesampleNumber(1)
-            if( !(await this.createLayer() && await this.createSqrWave() && this.setWavesampleNumber(i+1) && await this.uploadWavToEPS(wave))){
+            //this.setWavesampleNumber(1)
+            if( !(await this.createLayer() && await this.createSqrWave() && this.setWavesampleNumber(i+1) && await this.uploadWavToEPS(wave, arrayOfWaveTables.length, i, progressCallback))){
                 this.errorCallback("Error: Unable to update instrument parameters")
                 return false
             }
